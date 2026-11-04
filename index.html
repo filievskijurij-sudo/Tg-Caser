@@ -305,6 +305,10 @@ img.edb{border-radius:22%;padding:0;box-sizing:border-box;box-shadow:inset 0 0 0
 .slot .mf{display:grid;grid-template-columns:repeat(3,32px);gap:4px;justify-content:center}.slot .mf i{width:32px;height:32px;font-size:22px;line-height:1;font-style:normal;display:flex;align-items:center;justify-content:center;overflow:hidden}.slot .mf img{width:32px;height:32px}
 #tap{border-radius:0!important;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0.5 1 23 23'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffe27a'/%3E%3Cstop offset='.55' stop-color='%23ffbe2e'/%3E%3Cstop offset='1' stop-color='%23f79a0e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M10.55 2.70 L14.68 7.97 L21.35 8.44 L17.61 13.99 L19.22 20.48 L12.79 18.64 L7.12 22.18 L6.88 15.50 L1.76 11.19 L8.04 8.90Z' fill='url%28%23g%29' stroke='%23e07a06' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M8.2 14.6c2.6-1.1 5.2-1.6 8.6-1.5c-2.6.6-4.6 1.7-6.3 3.4z' fill='%23fff3c2' opacity='.85'/%3E%3Cpath d='M10.6 7.6l1.2-2.4' stroke='%23fff6d0' stroke-width='1.3' stroke-linecap='round' opacity='.9'/%3E%3C/svg%3E") center/contain no-repeat!important;box-shadow:none!important;position:relative;will-change:transform;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 #tap::before{content:'';position:absolute;inset:-18%;z-index:-1;border-radius:50%;background:radial-gradient(circle,rgba(255,184,31,.38),rgba(255,184,31,0) 65%);pointer-events:none}
+.dg[data-dsel]{position:relative;cursor:pointer;transition:transform .12s,opacity .12s}.dg[data-dsel]:active{transform:scale(.96)}
+.dg .dsx{display:none}.dg.sell{border-color:#fb5a6b;background:radial-gradient(90% 70% at 50% 22%,rgba(251,90,107,.28),transparent 74%),var(--glass)}
+.dg.sell .di{opacity:.55}.dg.sell .dsx{display:block;position:absolute;top:6px;left:50%;transform:translateX(-50%);font:800 9.5px/1 var(--txt);font-style:normal;color:#fff;background:#fb5a6b;padding:3px 7px;border-radius:20px;z-index:1}
+.dhint{font-size:12px;color:var(--mut);margin-top:-6px}
 </style>
 </head>
 <body>
@@ -430,7 +434,7 @@ img.edb{border-radius:22%;padding:0;box-sizing:border-box;box-shadow:inset 0 0 0
   </div>
 </div>
 <div class="modal" id="modal"><button class="close" id="close" aria-label="Закрыть">✕</button><div style="font:700 16px var(--disp)" id="tapinfo">1 тап = +20</div><button id="tap" aria-label="Тап"></button><div style="font:800 22px var(--disp);color:var(--gold)" id="mc"></div></div>
-<div class="modal" id="drop"><div id="dtitle">Вам выпало</div><div class="dgrid" id="dc"></div><div class="dtotal" id="dtotal"></div><div class="dbtns"><button class="btn ghost" id="dk">Оставить</button><button class="btn" id="ds">Продать</button></div></div>
+<div class="modal" id="drop"><div id="dtitle">Вам выпало</div><div class="dgrid" id="dc"></div><div class="dtotal" id="dtotal"></div><div class="dhint" id="dhint">Нажмите на подарки, которые хотите продать</div><div class="dbtns"><button class="btn ghost" id="dk">Оставить</button><button class="btn" id="ds">Продать</button></div></div>
 <div class="modal fcm" id="fcm"><div class="ft">Бесплатный кейс</div><div class="fbox">🎁</div><div class="roll"><div class="strip" id="fstrip"></div></div><div class="fs" id="fsub">Открываем...</div><button class="btn ghost skip" id="fskip">Пропустить</button></div>
 <div id="toast"></div>
 <script>
@@ -754,11 +758,20 @@ function ctRoll(T){
 let AC=null;
 function snd(){try{if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();}catch(e){}}
 function beep(f,d,v,type,delay,soft){if(!AC)return;try{const t=AC.currentTime+(delay||0),o=AC.createOscillator(),g=AC.createGain();o.type=type||'square';o.frequency.value=f;g.gain.setValueAtTime(soft?.0001:v,t);if(soft)g.gain.linearRampToValueAtTime(v,t+Math.min(.02,d/3));g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d);}catch(e){}}
-const tick=()=>beep(950,.04,.07,'square');
+let tkLast=0;
+function tick(){if(!AC)return;const now=AC.currentTime;if(now-tkLast<.03)return;tkLast=now;
+  try{const t=now+.005,f=1150*(0.97+Math.random()*.06),o=AC.createOscillator(),o2=AC.createOscillator(),g=AC.createGain(),g2=AC.createGain(),lp=AC.createBiquadFilter();
+    lp.type='lowpass';lp.frequency.value=2600;
+    o.type='sine';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*.55,t+.05);
+    o2.type='triangle';o2.frequency.setValueAtTime(f*.5,t);o2.frequency.exponentialRampToValueAtTime(f*.3,t+.05);
+    g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.055,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+.075);
+    g2.gain.setValueAtTime(.0001,t);g2.gain.linearRampToValueAtTime(.03,t+.003);g2.gain.exponentialRampToValueAtTime(.0001,t+.06);
+    o.connect(g);o2.connect(g2);g.connect(lp);g2.connect(lp);lp.connect(AC.destination);
+    o.start(t);o2.start(t);o.stop(t+.09);o2.stop(t+.09);}catch(e){}}
 /* мягкие звуки (апгрейдер и новые игры): синус, плавное нарастание, тихая громкость */
 const stick=()=>beep(480,.09,.03,'sine',0,1);
 function softChime(ok){if(ok)[392,494,587,784].forEach((f,i)=>beep(f,.4,.05,'sine',i*.12,1));else[294,247].forEach((f,i)=>beep(f,.45,.05,'sine',i*.2,1));}
-function chime(ok){if(ok)[523,659,784,1047].forEach((f,i)=>beep(f,.25,.12,'triangle',i*.1));else[330,262].forEach((f,i)=>beep(f,.3,.12,'sawtooth',i*.18));}
+function chime(ok){if(ok)[523,659,784,1047].forEach((f,i)=>{beep(f,.55,.06,'sine',i*.09,1);beep(f*2,.3,.012,'sine',i*.09,1);});else[392,330].forEach((f,i)=>beep(f,.5,.05,'sine',i*.16,1));}
 /* щелчок каждый раз, когда позиция пересекает шаг */
 function watch(el,pos,step,ms){const t0=performance.now();let last=null;(function f(){const p=pos(el);if(last!=null&&Math.floor(p/step)!==Math.floor(last/step))tick();last=p;if(performance.now()-t0<ms)requestAnimationFrame(f);})();}
 const xOf=el=>-new DOMMatrix(getComputedStyle(el).transform).m41;
@@ -843,6 +856,12 @@ function render(){
 }
 function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===(['up','ct','rk','mn'].includes(v)?'games':v)));$('main').scrollTop=0;}
 /* ===== окно выпавших подарков ===== */
+let dSel=new Set();
+function dBtns(){const ids=S.pend||[],many=ids.length>1,k=dSel.size,sum=ids.reduce((a,id)=>a+G[id].p,0),ss=[...dSel].reduce((a,i)=>a+G[ids[i]].p,0);
+  $('dk').textContent=k?`Оставить ${ids.length-k}`:many?'Оставить все':'Оставить';
+  $('ds').innerHTML=k?`Продать ${k}<span>${cc}${fmt(ss)}</span>`:`${many?'Продать все':'Продать'}<span>${cc}${fmt(sum)}</span>`;
+  document.querySelectorAll('#dc [data-dsel]').forEach(e=>e.classList.toggle('sell',dSel.has(+e.dataset.dsel)));}
+document.addEventListener('click',e=>{const d=e.target.closest('[data-dsel]');if(!d)return;const i=+d.dataset.dsel;dSel.has(i)?dSel.delete(i):dSel.add(i);dBtns();});
 function showDrop(){
   const ids=(S.pend||[]).filter(id=>G[id]);if(!ids.length){S.pend=null;S.cs=null;save();return;}
   const gs=ids.map(id=>G[id]),sum=gs.reduce((a,g)=>a+g.p,0),best=gs.reduce((a,g)=>g.p>a.p?g:a,gs[0]),many=gs.length>1;
@@ -850,12 +869,13 @@ function showDrop(){
   const ct=S.cs>0;
   $('dtitle').textContent=ct?'Контракт выполнен':many?`Выпало ${gs.length} подарков`:'Вам выпало';
   $('dc').className=many?'dgrid':'dgrid one';
-  $('dc').innerHTML=gs.map(g=>`<div class="dg" style="--cl:${col(g.p)}"><div class="di">${ico(g)}</div><b>${g.n}</b><span>${cc}${fmt(g.p)}</span></div>`).join('');
+  dSel=new Set();
+  $('dc').innerHTML=gs.map((g,i)=>`<div class="dg" style="--cl:${col(g.p)}"${many?` data-dsel="${i}"`:''}><i class="dsx">Продать</i><div class="di">${ico(g)}</div><b>${g.n}</b><span>${cc}${fmt(g.p)}</span></div>`).join('');
+  $('dhint').style.display=many?'':'none';
   const dt=$('dtotal');
   if(ct){const up=best.p>S.cs;dt.textContent=`Сумма контракта ${fmt(S.cs)} · результат ${up?'лучше':'хуже'}`;dt.style.color=up?'#34d399':'#fb5a6b';}
   else{dt.textContent=many?`Всего на ${fmt(sum)} коинов`:'';dt.style.color='';}
-  $('dk').textContent=many?'Оставить все':'Оставить';
-  $('ds').innerHTML=`${many?'Продать все':'Продать'}<span>${cc}${fmt(sum)}</span>`;
+  dBtns();
   $('drop').classList.add('on');
 }
 document.addEventListener('click',e=>{
@@ -938,8 +958,11 @@ $('open').onclick=()=>{
   watch(first,xOf,pitch,maxMs+100);
   setTimeout(()=>{busy=false;render();chime(true);showDrop();hap('success');},maxMs+250);
 };
-$('dk').onclick=()=>{if(!S.pend)return;const n=S.pend.length;S.inv.push(...S.pend);S.pend=null;S.cs=null;$('crolls').innerHTML='';save();$('drop').classList.remove('on');render();toast(n>1?`${n} подарков в инвентаре`:'Подарок в инвентаре');};
-$('ds').onclick=()=>{if(!S.pend)return;const p=S.pend.reduce((a,id)=>a+G[id].p,0);S.coins+=p;S.pend=null;S.cs=null;$('crolls').innerHTML='';save();$('drop').classList.remove('on');render();toast(`Продано за ${fmt(p)} коинов`);};
+$('dk').onclick=()=>{if(!S.pend)return;if(dSel.size){sellSel();return;}const n=S.pend.length;S.inv.push(...S.pend);S.pend=null;S.cs=null;$('crolls').innerHTML='';save();$('drop').classList.remove('on');render();toast(n>1?`${n} подарков в инвентаре`:'Подарок в инвентаре');};
+function sellSel(){const ids=S.pend,sell=ids.filter((id,i)=>dSel.has(i)),keep=ids.filter((id,i)=>!dSel.has(i)),p=sell.reduce((a,id)=>a+G[id].p,0);
+  S.coins+=p;S.inv.push(...keep);S.pend=null;S.cs=null;dSel=new Set();$('crolls').innerHTML='';save();$('drop').classList.remove('on');render();
+  toast(`Продано ${sell.length} за ${fmt(p)} коинов · ${keep.length} в инвентаре`);}
+$('ds').onclick=()=>{if(!S.pend)return;if(dSel.size){sellSel();return;}const p=S.pend.reduce((a,id)=>a+G[id].p,0);S.coins+=p;S.pend=null;S.cs=null;$('crolls').innerHTML='';save();$('drop').classList.remove('on');render();toast(`Продано за ${fmt(p)} коинов`);};
 /* ===== настройки и промокоды ===== */
 const PROMOS={};/* пример: {'START2027':5000} *//* код -> награда в коинах; каждый код можно активировать один раз */
 function usePromo(){
