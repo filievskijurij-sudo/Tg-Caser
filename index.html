@@ -128,7 +128,7 @@ input{-webkit-user-select:text;user-select:text}
 .fl input{flex:1;min-width:0;background:var(--glass);border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:12px;font:600 14px var(--txt)}
 .fl input::placeholder{color:var(--mut)}
 /* окна */
-.modal{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:20px;background:rgba(6,5,14,.92);backdrop-filter:blur(8px)}
+.modal{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:20px;background:#07060f}
 .modal.on{display:flex}
 .close{position:absolute;top:calc(14px + env(safe-area-inset-top,0));right:16px;border:1px solid var(--line);background:var(--glass);color:var(--ink);width:40px;height:40px;border-radius:50%;font-size:17px}
 #tap{width:236px;height:236px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 28%,#fff1a8,#ffc83d 42%,#e08e00);font-size:84px;box-shadow:0 0 0 10px rgba(255,200,61,.12),0 0 60px rgba(255,184,31,.4);touch-action:manipulation}
@@ -303,7 +303,8 @@ nav button .dot.on{display:block}
 .gt.top .nm{color:var(--gold)}.gt.top .nm::before{content:"🏆 "}
 img.edb{border-radius:22%;padding:0;box-sizing:border-box;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 4px 14px rgba(0,0,0,.35)}
 .slot .mf{display:grid;grid-template-columns:repeat(3,32px);gap:4px;justify-content:center}.slot .mf i{width:32px;height:32px;font-size:22px;line-height:1;font-style:normal;display:flex;align-items:center;justify-content:center;overflow:hidden}.slot .mf img{width:32px;height:32px}
-#tap{border-radius:0!important;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0.5 1 23 23'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffe27a'/%3E%3Cstop offset='.55' stop-color='%23ffbe2e'/%3E%3Cstop offset='1' stop-color='%23f79a0e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M10.55 2.70 L14.68 7.97 L21.35 8.44 L17.61 13.99 L19.22 20.48 L12.79 18.64 L7.12 22.18 L6.88 15.50 L1.76 11.19 L8.04 8.90Z' fill='url%28%23g%29' stroke='%23e07a06' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M8.2 14.6c2.6-1.1 5.2-1.6 8.6-1.5c-2.6.6-4.6 1.7-6.3 3.4z' fill='%23fff3c2' opacity='.85'/%3E%3Cpath d='M10.6 7.6l1.2-2.4' stroke='%23fff6d0' stroke-width='1.3' stroke-linecap='round' opacity='.9'/%3E%3C/svg%3E") center/contain no-repeat!important;box-shadow:none!important;filter:drop-shadow(0 0 40px rgba(255,184,31,.45)) drop-shadow(0 12px 18px rgba(0,0,0,.45))}
+#tap{border-radius:0!important;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0.5 1 23 23'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffe27a'/%3E%3Cstop offset='.55' stop-color='%23ffbe2e'/%3E%3Cstop offset='1' stop-color='%23f79a0e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M10.55 2.70 L14.68 7.97 L21.35 8.44 L17.61 13.99 L19.22 20.48 L12.79 18.64 L7.12 22.18 L6.88 15.50 L1.76 11.19 L8.04 8.90Z' fill='url%28%23g%29' stroke='%23e07a06' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M8.2 14.6c2.6-1.1 5.2-1.6 8.6-1.5c-2.6.6-4.6 1.7-6.3 3.4z' fill='%23fff3c2' opacity='.85'/%3E%3Cpath d='M10.6 7.6l1.2-2.4' stroke='%23fff6d0' stroke-width='1.3' stroke-linecap='round' opacity='.9'/%3E%3C/svg%3E") center/contain no-repeat!important;box-shadow:none!important;position:relative;will-change:transform;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+#tap::before{content:'';position:absolute;inset:-18%;z-index:-1;border-radius:50%;background:radial-gradient(circle,rgba(255,184,31,.38),rgba(255,184,31,0) 65%);pointer-events:none}
 </style>
 </head>
 <body>
@@ -954,7 +955,7 @@ $('setb').onclick=()=>$('setp').classList.remove('on');
 $('pact').onclick=usePromo;
 $('pcode').addEventListener('keydown',e=>{if(e.key==='Enter')usePromo();});
 $('plus').onclick=()=>$('modal').classList.add('on');
-$('close').onclick=()=>$('modal').classList.remove('on');
+$('close').onclick=()=>{$('modal').classList.remove('on');save();render();};
 /* ===== анти-автокликер v3 =====
    Разрешено тапать до 6 пальцев одновременно или по очереди. Ловим не «много пальцев», а признаки программы:
    1) ненастоящие касания (isTrusted) и тапы в фоне — бан сразу;
@@ -1081,9 +1082,9 @@ $('tap').addEventListener('pointerdown',e=>{
   S.hn++;if(S.hn%40===0)acStore();
   S.coins+=tapV();qAdd('tap',1);bal();
   const el=document.createElement('div');el.className='fx';el.textContent='+'+tapV();el.style.left=(e.clientX-12)+'px';el.style.top=(e.clientY-30)+'px';
-  document.body.appendChild(el);setTimeout(()=>el.remove(),700);
+  if(document.querySelectorAll('.fx').length<12){document.body.appendChild(el);setTimeout(()=>el.remove(),700);}
   try{tg.HapticFeedback.impactOccurred('light')}catch(x){}
-  clearTimeout(window._sv);window._sv=setTimeout(()=>{save();render();},400);
+  clearTimeout(window._sv);window._sv=setTimeout(()=>{save();if(!$('modal').classList.contains('on'))render();},400);
 });
 /* автокликеры отпускают кнопку мгновенно: серия нулевых/одинаковых удержаний = бот */
 $('tap').addEventListener('pointerup',e=>{
