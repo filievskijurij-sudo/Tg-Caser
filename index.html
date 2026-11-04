@@ -299,8 +299,8 @@ nav button .dot.on{display:block}
 .pity{margin:12px 0 0;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(255,203,71,.12),var(--card) 70%);border:1px solid rgba(255,203,71,.35);font-size:13px;font-weight:700;color:#ffe3a1}
 .pity small{display:block;color:var(--mut);font-weight:600;font-size:12px;margin-top:3px}
 .pity .bar{margin:10px 0 0;height:7px}.pity .bar i{background:linear-gradient(90deg,#ffcb47,#ff9f2e)}
-.gt.top{box-shadow:0 0 0 1.5px var(--gold),0 0 18px -6px var(--gold)}
-.gt.top .nm{color:var(--gold)}.gt.top .nm::before{content:"🏆 "}
+.gt.tp{box-shadow:0 0 0 1.5px var(--gold),0 0 18px -6px var(--gold)}
+.gt.tp .nm{color:var(--gold)}.gt.tp .nm::before{content:"🏆 "}
 img.edb{border-radius:22%;padding:0;box-sizing:border-box;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 4px 14px rgba(0,0,0,.35)}
 .slot .mf{display:grid;grid-template-columns:repeat(3,32px);gap:4px;justify-content:center}.slot .mf i{width:32px;height:32px;font-size:22px;line-height:1;font-style:normal;display:flex;align-items:center;justify-content:center;overflow:hidden}.slot .mf img{width:32px;height:32px}
 #tap{border-radius:0!important;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0.5 1 23 23'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffe27a'/%3E%3Cstop offset='.55' stop-color='%23ffbe2e'/%3E%3Cstop offset='1' stop-color='%23f79a0e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M10.55 2.70 L14.68 7.97 L21.35 8.44 L17.61 13.99 L19.22 20.48 L12.79 18.64 L7.12 22.18 L6.88 15.50 L1.76 11.19 L8.04 8.90Z' fill='url%28%23g%29' stroke='%23e07a06' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M8.2 14.6c2.6-1.1 5.2-1.6 8.6-1.5c-2.6.6-4.6 1.7-6.3 3.4z' fill='%23fff3c2' opacity='.85'/%3E%3Cpath d='M10.6 7.6l1.2-2.4' stroke='%23fff6d0' stroke-width='1.3' stroke-linecap='round' opacity='.9'/%3E%3C/svg%3E") center/contain no-repeat!important;box-shadow:none!important;position:relative;will-change:transform;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
@@ -613,6 +613,14 @@ const N4=G.length;
 [["🏆","Intelligence Cup",1200000,'intelligencecup'],["🥇","Algorithm Cup",800000,'algorithmcup'],["🔒","Lucky Locket",180000,'luckylocket'],["🕶️","Durov's Glasses",150000,'durovsglasses'],["🐕","Resistance Dog",120000,'resistancedog'],["🪔","Mirage Lamp",60000,'miragelamp'],["🏄","Surge Board",20000,'surgeboard'],["🖋️","Fine Pen",18000,'finepen'],["🏖️","Pool Float",2200,'poolfloat'],["🗽","Liberty Figure",1500,'libertyfigure']].forEach(([e,n,p,sl])=>addBase(e,n,p,sl));
 const NUMS4={"intelligencecup": [6, 3, 7, 11, 13, 21], "algorithmcup": [1, 9, 4, 12, 15, 36], "luckylocket": [4, 2, 80, 64, 130, 389], "durovsglasses": [2, 4, 90, 84, 163, 690], "resistancedog": [7, 1, 38, 15, 670, 236], "miragelamp": [3, 4, 57, 80, 829, 164], "surgeboard": [1, 4, 73, 97, 644, 537], "finepen": [6, 8, 84, 68, 470, 406], "poolfloat": [4, 3, 99, 41, 183, 688], "libertyfigure": [5, 9, 73, 53, 846, 559]};
 G.filter(g=>g.id>=N4&&!g.v).forEach(g=>(NUMS4[g.s]||[]).forEach(n=>G.push({id:G.length,e:g.e,n:g.n+' #'+n,p:Math.round(g.p*(n<10?2.6:n<100?1.5:1.15)/10)*10,s:g.s,v:n})));
+/* топ-подарки 5–30 млн: номера проверены, картинки есть на nft.fragment.com */
+const R3={
+  frog2:addRare('Kissed Frog',2,5000000),low1:addRare('Low Rider',1,5200000),ion1:addRare('Ion Gem',1,5500000),
+  watch2:addRare('Swiss Watch',2,6000000),neko3:addRare('Neko Helmet',3,6500000),bonded2:addRare('Bonded Ring',2,7000000),
+  ufc3:addRare('UFC Strike',3,7500000),khabib2:addRare("Khabib's Papakha",2,8000000),nail2:addRare('Nail Bracelet',2,9000000),
+  arm2:addRare('Mighty Arm',2,10000000),astral4:addRare('Astral Shard',4,12000000),peach4:addRare('Precious Peach',4,14000000),
+  durov4:addRare("Durov's Cap",4,17000000),heart4:addRare('Heart Locket',4,20000000),pepe13:addRare('Plush Pepe',13,24000000),
+  pepe11:addRare('Plush Pepe',11,30000000)};
 G.forEach(g=>g.nft=!!g.s);
 const UPG=G.filter(g=>g.nft);
 /* фоны (backdrop) для особых изданий, как у NFT-подарков в Telegram */
@@ -693,6 +701,9 @@ CASES.push(
 {name:'Офис',price:10000,c:'#22d3ee',nw:1,cover:['Fine Pen','Surge Board','Star Notepad'],list:U(['Desk Calendar','Star Notepad','Input Key','Tama Gadget','Timeless Book','Fine Pen','Surge Board',...NW('Fine Pen'),...NW('Surge Board'),'Mirage Lamp','Heart Locket'])},
 {name:'Дуров',price:40000,c:'#818cf8',nw:1,cover:["Durov's Glasses",'Resistance Dog','Mirage Lamp'],list:U(['Heroic Helmet','Mini Oscar',"Durov's Cap",'Mirage Lamp','Heart Locket','Precious Peach',...NW('Mirage Lamp'),'Plush Pepe','Resistance Dog',"Durov's Glasses",...NW('Resistance Dog'),...NW("Durov's Glasses")])},
 {name:'Кубки',price:150000,c:'#34d399',nw:1,cover:['Intelligence Cup','Algorithm Cup','Lucky Locket'],list:U(['Precious Peach','Plush Pepe','Resistance Dog',"Durov's Glasses",'Lucky Locket',R.khabib1,R.chimp1,...NW('Lucky Locket'),R.heart2,R.durov2,'Algorithm Cup',...NW('Algorithm Cup'),'Intelligence Cup',...NW('Intelligence Cup')])});
+CASES.push(
+{name:'Олигарх',price:1500000,c:'#f59e0b',nw:1,cover:[R3.watch2,R3.durov4,R3.ufc3],list:[R2.neko1,R2.bonded1,R2.peach3,R2.astralB,R2.pepe3,R2.khabibG,R2.peachG,R2.heartB,R2.heartG,R2.durovG,R2.pepeB,R2.pepeG,R2.heartP,R2.durovP,'Plush Pepe #1',R3.frog2,R3.low1,R3.ion1,R3.watch2,R3.neko3,R3.bonded2,R3.ufc3,R3.khabib2,R3.durov4]},
+{name:'Легенда',price:3000000,c:'#22e6ff',nw:1,cover:[R3.heart4,R3.pepe11,R3.pepe13],list:[R2.peach3,R2.pepe3,R2.peachG,R2.heartB,R2.heartG,R2.durovG,R2.pepeB,R2.pepeG,R2.heartP,R2.durovP,'Plush Pepe #1',R3.frog2,R3.ion1,R3.neko3,R3.bonded2,R3.khabib2,R3.nail2,R3.arm2,R3.astral4,R3.peach4,R3.durov4,R3.heart4,R3.pepe13,R3.pepe11]});
 CASES.sort((a,b)=>a.price-b.price);
 
 /* ===== v9: топ-дроп и гарант =====
@@ -785,7 +796,7 @@ function spin(el,from,to,ms,done){const t0=performance.now();let last=from,sk=fa
     if(Math.floor(a/12)!==Math.floor(last/12))stick();last=a;
     if(t<1)requestAnimationFrame(f);else done();})();}
 function toast(t){const el=$('toast');el.textContent=t;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',2800);}
-const tile=(g,a='',x='',tag)=>`<div class="gt ${a}" style="--cl:${col(g.p)}" ${x}><span class="pr">${cc}${fmt(g.p)}</span><span class="tag">${tag!=null?tag:(g.nft?'NFT':'')}</span><span class="em">${ico(g)}</span><span class="nm">${g.n}</span>`;
+const tile=(g,a='',x='',tag)=>`<div class="gt ${a}" style="--cl:${col(g.p)}" ${x}><span class="pr">${cc}${g.p>=1e7?fmt(g.p/1e6)+' млн':fmt(g.p)}</span><span class="tag">${tag!=null?tag:(g.nft?'NFT':'')}</span><span class="em">${ico(g)}</span><span class="nm">${g.n}</span>`;
 /* ===== шанс: не выше MAXC (95%) и не ниже 1% — чтобы самые дорогие подарки можно было апгрейдить ===== */
 /* UPF — сколько % от честного шанса получает игрок. Было 90 (шанс занижен на 10%), теперь 100 = честно: поставил 50% цены — шанс 50% */
 const UPF=100;
@@ -814,7 +825,7 @@ function render(){
   document.querySelectorAll('#qty button').forEach(b=>b.classList.toggle('on',+b.dataset.q===qty));
   setH('cases',CASES.map((c,i)=>{if(!cfOk(c))return '';const[a,b,d]=c.cv;return `<div class="case" data-case="${i}" style="--cc:${c.c}">${c.nw?'<span class="nw">NEW</span>':''}<div class="art"><i class="s l">${ico(b)}</i><i class="s r">${ico(d)}</i><i class="m">${ico(a)}</i></div><div class="cf"><b>${c.name}</b><div class="price">${cc}${fmt(c.price)}</div></div></div>`}).join(''));
   const D=cs().drops,W=D.reduce((a,d)=>a+d[1],0);
-  setH('cg',D.slice().sort((a,b)=>G[a[0]].p-G[b[0]].p).map(([id,w])=>{const pc=w/W*100;return tile(G[id],cs().top.has(id)?'top':'','',(pc<1?pc.toFixed(2):pc.toFixed(1))+'%')+'</div>'}).join(''));
+  setH('cg',D.slice().sort((a,b)=>G[a[0]].p-G[b[0]].p).map(([id,w])=>{const pc=w/W*100;return tile(G[id],cs().top.has(id)?'tp':'','',(pc<1?pc.toFixed(2):pc.toFixed(1))+'%')+'</div>'}).join(''));
   setH('invinfo',S.inv.length?`${S.inv.length} шт. на ${fmt(S.inv.reduce((a,id)=>a+G[id].p,0))} коинов`:'');
   setH('inv',S.inv.length?S.inv.map((id,i)=>tile(G[id])+`<button data-sell="${i}">Продать</button></div>`).join(''):'<div class="empty">Пока пусто. Откройте кейс.</div>');
   /* контракты */
